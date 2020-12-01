@@ -38,3 +38,14 @@ test/.coverage
 test/data/legacy_serialized.pt
 *.DS_Store
 *~
+*/*.mp4
+*/**/*.mp4
+*/**/**/*.mp4
+*/**/**/**/*.mp4
+*/**/**/**/**/*.mp4
+*/*.png
+*/**/*.png
+*/**/**/*.png
+*/**/**/**/*.png
+*/**/**/**/**/*.png
+.vscode/settings.json
