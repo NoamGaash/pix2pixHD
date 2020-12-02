@@ -2,6 +2,8 @@ import os.path
 from data.base_dataset import BaseDataset, get_params, get_transform, normalize
 from data.image_folder import make_dataset
 from PIL import Image
+import random
+
 
 class AlignedDataset(BaseDataset):
     def initialize(self, opt):
@@ -9,20 +11,21 @@ class AlignedDataset(BaseDataset):
         self.root = opt.dataroot    
 
         ### input A (label maps)
-        dir_A = '_A' if self.opt.label_nc == 0 else '_label'
+        dir_A = '_label'
         self.dir_A = os.path.join(opt.dataroot, opt.phase + dir_A)
         self.A_paths = sorted(make_dataset(self.dir_A))
 
         ### input B (real images)
         if opt.isTrain or opt.use_encoded_image:
-            dir_B = '_B' if self.opt.label_nc == 0 else '_img'
+            dir_B = '_img'
             self.dir_B = os.path.join(opt.dataroot, opt.phase + dir_B)  
             self.B_paths = sorted(make_dataset(self.dir_B))
 
         ### instance maps
         if not opt.no_instance:
-            self.dir_inst = os.path.join(opt.dataroot, opt.phase + '_inst')
-            self.inst_paths = sorted(make_dataset(self.dir_inst))
+            self.dir_inst = os.path.join(opt.dataroot, opt.phase + '_img')
+            self.inst_paths = make_dataset(self.dir_inst)
+            random.shuffle(self.inst_paths)
 
         ### load precomputed instance-wise encoded features
         if opt.load_features:                              

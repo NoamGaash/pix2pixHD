@@ -29,7 +29,7 @@ class Pix2PixHDModel(BaseModel):
         # Generator network
         netG_input_nc = input_nc        
         if not opt.no_instance:
-            netG_input_nc += 1
+            netG_input_nc += 3
         if self.use_features:
             netG_input_nc += opt.feat_num                  
         self.netG = networks.define_G(netG_input_nc, opt.output_nc, opt.ngf, opt.netG, 
@@ -41,7 +41,7 @@ class Pix2PixHDModel(BaseModel):
             use_sigmoid = opt.no_lsgan
             netD_input_nc = input_nc + opt.output_nc
             if not opt.no_instance:
-                netD_input_nc += 1
+                netD_input_nc += 3
             self.netD = networks.define_D(netD_input_nc, opt.ndf, opt.n_layers_D, opt.norm, use_sigmoid, 
                                           opt.num_D, not opt.no_ganFeat_loss, gpu_ids=self.gpu_ids)
 
