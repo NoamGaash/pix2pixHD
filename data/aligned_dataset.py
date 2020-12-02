@@ -13,19 +13,20 @@ class AlignedDataset(BaseDataset):
         ### input A (label maps)
         dir_A = '_label'
         self.dir_A = os.path.join(opt.dataroot, opt.phase + dir_A)
-        self.A_paths = sorted(make_dataset(self.dir_A))
+        self.A_paths = make_dataset(self.dir_A)
 
         ### input B (real images)
         if opt.isTrain or opt.use_encoded_image:
             dir_B = '_img'
             self.dir_B = os.path.join(opt.dataroot, opt.phase + dir_B)  
-            self.B_paths = sorted(make_dataset(self.dir_B))
+            self.B_paths = make_dataset(self.dir_B)
 
         ### instance maps
         if not opt.no_instance:
             self.dir_inst = os.path.join(opt.dataroot, opt.phase + '_img')
-            self.inst_paths = make_dataset(self.dir_inst)
-            random.shuffle(self.inst_paths)
+            self.inst_paths = make_dataset(self.dir_inst, True)
+        
+        self.inst_paths, self.A_paths, self.B_paths = random.shuffle(zip(self.inst_paths, self.A_paths, self.B_paths))
 
         ### load precomputed instance-wise encoded features
         if opt.load_features:                              

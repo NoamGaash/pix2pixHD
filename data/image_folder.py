@@ -7,6 +7,7 @@
 import torch.utils.data as data
 from PIL import Image
 import os
+from glob import glob
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
@@ -18,16 +19,26 @@ def is_image_file(filename):
     return any(filename.endswith(extension) for extension in IMG_EXTENSIONS)
 
 
-def make_dataset(dir):
+def make_dataset(dir, shuffle_inside_each_video = False):
     images = []
     assert os.path.isdir(dir), '%s is not a valid directory' % dir
 
-    for root, _, fnames in sorted(os.walk(dir)):
+    subdirs = glob(os.path.join(dir, '*'))
+    
+    for subdir in subdirs:
+        dir_images = glob(os.path.join(subdir, '*'))
+        if shuffle_inside_each_video:
+            dir_images = sorted(dir_images)
+        images = images + dir_images
+
+    print(len(images))
+
+    """for root, _, fnames in sorted(os.walk(dir)):
         for fname in fnames:
             if is_image_file(fname):
                 path = os.path.join(root, fname)
                 images.append(path)
-
+    """
     return images
 
 
